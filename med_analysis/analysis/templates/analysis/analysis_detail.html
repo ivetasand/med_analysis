@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>График для {{ analysis.name  }}</h1>
+<div id="chart_div"></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ['Дата', 'Значение', 'Нижний лимит', 'Верхний лимит'],
+      {% for result in results %}
+    ['{{ result.date }}', {{ result.value }}, {{ result.lower_limit }}, {{ result.upper_limit }}],
+    {% endfor %}
+  ]);
+
+    var options = {
+      title: 'Динамика значения "{{ analysis.name }}"',
+      hAxis: {title: 'Дата'},
+      vAxis: {title: '{{ analysis.measurement_unit.name }} ({{ analysis.measurement_unit.abbreviation }})'},
+      curveType: 'function',
+      isStacked: true,
+      legend: {position: 'bottom', textStyle: {fontSize: 12}},
+      backgroundColor: '#f2f2f0',
+      series: {
+        0: { color: '#1976d2', lineWidth: 2 },
+        1: { color: '#ef5350', lineWidth: 2, lineDashStyle: [4, 4] },
+        2: { color: '#ef5350', lineWidth: 2, lineDashStyle: [4, 4] },
+      }
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+    chart.draw(data, options);
+  }
+</script>
+{% endblock %}

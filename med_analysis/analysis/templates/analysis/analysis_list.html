@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Список анализов</h1>
+  <ul>
+  {% for analysis in analysis_list %}
+    <li><a href="{% url 'analysis_detail' analysis.id %}">{{ analysis.name }}</a></li>
+  {% empty %}
+    <li>Нет доступных анализов.</li>
+  {% endfor %}
+  </ul>
+{% endblock %}

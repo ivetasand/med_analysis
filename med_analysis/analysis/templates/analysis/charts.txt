@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Выберите тип анализа:</h1>
+  <ul>
+    {% for analysis in analyses %}
+      <li><a href="{% url 'analysis' analysis.id %}">{{ analysis.name }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <div id="chart-container">
+    <canvas id="chart"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    var chartData = {
+      labels: {{ labels|safe }},
+      datasets: [{
+        label: 'Значения анализа',
+        data: {{ data|safe }},
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }, {
+        label: 'Норма анализа',
+        data: {{ norms|safe }},
+        fill: false,
+        borderColor: 'rgb(255, 99, 132)',
+        tension: 0.1
+      }]
+    };
+
+    var chartOptions = {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: 'График анализа {{ analysis_name }}'
+        },
+        legend: {
+          position: 'bottom'
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Дата'
+          },
+          type: 'time',
+          time: {
+            unit: 'day',
+            displayFormats: {
+              day: 'DD.MM.YYYY'
+            }
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Значение'
+          }
+        }
+      }
+    };
+
+    var chart = new Chart('chart', {
+      type: 'line',
+      data: chartData,
+      options: chartOptions
+    });
+  </script>
+{% endblock %}
