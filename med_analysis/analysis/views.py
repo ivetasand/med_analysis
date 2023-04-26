@@ -3,6 +3,10 @@ from .models import Analysis, AnalysisResult
 from datetime import datetime, timedelta
 from django.db.models import Avg
 from django.db.models.functions import TruncDay
+from django.shortcuts import render, redirect
+from .forms import MyLoginForm
+from .gemotest import gemotest
+
 
 def index_view(request):
     # Получаем список всех доступных анализов
@@ -116,3 +120,19 @@ def charts(request):
                                             'daily_averages': daily_averages,
                                             'upper_norm': upper_norm,
                                             'lower_norm': lower_norm})
+
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = MyLoginForm(request.POST)
+        if form.is_valid():
+            login = form.cleaned_data['login']
+            password = form.cleaned_data['password']
+            select = form.cleaned_data['select']
+            # Do something with the parameters
+            if select == 'option2':
+                print(gemotest("93079180", "79267039809"))
+    else:
+        form = MyLoginForm()
+    return render(request, 'login.html', {'form': form})

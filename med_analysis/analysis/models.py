@@ -1,4 +1,8 @@
 from django.db import models
+from django.views.generic import FormView
+from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from .forms import MyLoginForm
 
 class Lab(models.Model):
     name = models.CharField(max_length=50)
@@ -41,3 +45,4 @@ class AnalysisResult(models.Model):
     
     def __str__(self):
         return f"{self.analysis} - {self.date}"
+

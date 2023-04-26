@@ -16,10 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from analysis import views
+from django.contrib.auth.views import LoginView
+from analysis.forms import MyLoginForm
+
+
 
 urlpatterns = [
     #path('', views.index_view, name='home'),
     path('analysis_list/', views.analysis_list, name='analysis_list'),
     path('analysis_list/<int:analysis_id>/', views.analysis_detail, name='analysis_detail'),
     path('charts/', views.charts, name='charts'),
+    path('login/', views.login_view, name='login')
 ]
